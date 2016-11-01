@@ -1,8 +1,6 @@
 # Block sorter class
-# Take an image as in input
-# should return an image.. not save it?
 
-from color_sort_functions import get_average_color, lum, step, tester
+from color_sort_functions import get_average_color, lum, step
 import colorsys
 from PIL import Image
 
@@ -18,14 +16,13 @@ class BlockSorter:
         self.color_size = color_size
         self.sort_dict = self._populate_sort_dict()
         self.sorting_types = ['avg_color', 'avg_hls',
-                              'avg_hsv', 'avg_hls',
-                              'avg_lum', 'avg_step',
-                              'avg_tester', 'avg_yiq']
+                              'avg_hsv', 'avg_lum',
+                              'avg_step']
 
     def _populate_sort_dict(self):
         keys_list = ['section_coordinates', 'sequence', 'avg_color',
-                     'avg_hsv', 'avg_hls', 'avg_lum',
-                     'avg_step', 'avg_tester', 'avg_yiq']
+                     'avg_hsv', 'avg_lum',
+                     'avg_step']
         sort_dict = {}
         for key in keys_list:
             sort_dict[key] = []
@@ -38,11 +35,8 @@ class BlockSorter:
             sort_dict['sequence'].append(x)
             sort_dict['avg_color'].append(rsb)
             sort_dict['avg_hsv'].append(colorsys.rgb_to_hsv(*rsb))
-            #sort_dict['avg_hls'].append(colorsys.rgb_to_hls(*rsb))
             sort_dict['avg_lum'].append(lum(*rsb))
             sort_dict['avg_step'].append(step(*rsb, self.step_sort_repetitions))
-            # sort_dict['avg_tester'].append(tester(*rsb))
-            # sort_dict['avg_yiq'].append(colorsys.rgb_to_yiq(*rsb))
         return sort_dict
 
     def _sections(self, width, height, n):
@@ -69,17 +63,12 @@ class BlockSorter:
 
         for num in sort_seq:
             section = self.image.crop(self.sort_dict['section_coordinates'][num])
-            # section = section.rotate(270)
             new_image_coords = self.sort_dict['section_coordinates'][(sequence_iter.__next__()) - 1]
             sorted_image.paste(section, new_image_coords)
         return sorted_image
-        # return sorted_image.rotate(90)
 
     def sort_image_rgb(self):
         return self.sort_image('avg_color')
-
-    def sort_image_hls(self):
-        return self.sort_image('avg_hls')
 
     def sort_image_hsv(self):
         return self.sort_image('avg_hsv')
@@ -89,12 +78,6 @@ class BlockSorter:
 
     def sort_image_step(self):
         return self.sort_image('avg_step')
-
-    def sort_image_tester(self):
-        return self.sort_image('avg_tester')
-
-    def sort_image_yiq(self):
-        return self.sort_image('avg_yiq')
 
 
 
