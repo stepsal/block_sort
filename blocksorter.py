@@ -6,21 +6,21 @@ from PIL import Image
 
 
 class BlockSorter:
-    def __init__(self, image_path, block_size=10, sort_type='avg_color', step_sort_repetitions=64,
+    def __init__(self, image, block_size=10, sort_type='avg_rgb', step_sort_repetitions=64,
                  color_size=2048):
 
-        self.image = Image.open(image_path)
+        self.image = image
         self.block_size = block_size
         self.sort_type = sort_type
         self.step_sort_repetitions = step_sort_repetitions
         self.color_size = color_size
         self.sort_dict = self._populate_sort_dict()
-        self.sorting_types = ['avg_color', 'avg_hls',
+        self.sorting_types = ['avg_rgb', 'avg_hls',
                               'avg_hsv', 'avg_lum',
                               'avg_step']
 
     def _populate_sort_dict(self):
-        keys_list = ['section_coordinates', 'sequence', 'avg_color',
+        keys_list = ['section_coordinates', 'sequence', 'avg_rgb',
                      'avg_hsv', 'avg_lum',
                      'avg_step']
         sort_dict = {}
@@ -33,7 +33,7 @@ class BlockSorter:
             rsb = get_average_color(self.image.crop(section), color_size=self.color_size)
             sort_dict['section_coordinates'].append(section)
             sort_dict['sequence'].append(x)
-            sort_dict['avg_color'].append(rsb)
+            sort_dict['avg_rgb'].append(rsb)
             sort_dict['avg_hsv'].append(colorsys.rgb_to_hsv(*rsb))
             sort_dict['avg_lum'].append(lum(*rsb))
             sort_dict['avg_step'].append(step(*rsb, self.step_sort_repetitions))
@@ -65,10 +65,11 @@ class BlockSorter:
             section = self.image.crop(self.sort_dict['section_coordinates'][num])
             new_image_coords = self.sort_dict['section_coordinates'][(sequence_iter.__next__()) - 1]
             sorted_image.paste(section, new_image_coords)
+        sorted_image = sorted_image.rotate(90, expand=True)
         return sorted_image
 
     def sort_image_rgb(self):
-        return self.sort_image('avg_color')
+        return self.sort_image('avg_rgb')
 
     def sort_image_hsv(self):
         return self.sort_image('avg_hsv')
