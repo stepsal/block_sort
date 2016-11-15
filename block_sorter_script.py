@@ -45,13 +45,13 @@ def main():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Block Sorter Script')
     parser.add_argument("-b", "--blocksize", dest="BLOCK_SIZE", default=10, type=int, help="Block Size")
-    parser.add_argument("-t", "--sort_type", dest="SORT_TYPE", default='step',
+    parser.add_argument("-t", "--sort_type", dest="SORT_TYPE", default='rgb',
                         choices=['rgb', 'hsv', 'lum', 'step'],
                         help="Sort Type")
     parser.add_argument("-s", "--step_repetitions", dest="STEP_SORT_REPETITIONS", default=64, type=int,
                         help="Number of Step repetitions for avg_step sort")
     parser.add_argument("-i", "--input", dest="INPUT_DIR",
-                        default="/home/stephen.salmon/Pictures/sunsets/", help="input directory")
+                        default="/home/stephen.salmon/Pictures/nebula/", help="input directory")
     try:
         args = parser.parse_args()
     except:
