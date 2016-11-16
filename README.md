@@ -1,8 +1,6 @@
 # block_sort
 Block sorting script written in Python.
-Image is divived up into blocks which are then color sorted in either of 4 ways (rgb, hsv, lum, step)
-The block_sort_script.py will sort all images in the input directory and spit the results into a output
-directory under the script folder.
+Image is divided up into blocks which can be color sorted in either of 4 ways (rgb, hsv, lum, step)
 
 ## Usage
 
